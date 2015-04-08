@@ -25,11 +25,15 @@ public class YarnConfig extends Config {
 	public static final String YARN_WORKER_PACKAGE_PATH = "yarn.worker.package.path";
 	private static final String YARN_WORKER_PACKAGE_PATH_DOC = "Relative path to the worker jar package";
 	
+	public static final String YARN_TASK_COUNT = "yarn.task.count";
+	public static final String YARN_TASK_COUNT_DOC = "Number of tasks to run";
+	
 	static{
 		config = new ConfigDef().define(YARN_PROPERTIES_FILE, Type.STRING, Importance.HIGH, YARN_PROPERTIES_FILE_DOC)
 				.define(YARN_CONTAINER_MEMORY_MB, Type.STRING, Importance.HIGH, YARN_CONTAINER_MEMORY_MB_DOC)
 				.define(YARN_CONTAINER_CPU_CORES, Type.STRING, Importance.HIGH, YARN_CONTAINER_CPU_CORES_DOC)
-				.define(YARN_WORKER_PACKAGE_PATH, Type.STRING, Importance.HIGH, YARN_WORKER_PACKAGE_PATH_DOC);
+				.define(YARN_WORKER_PACKAGE_PATH, Type.STRING, Importance.HIGH, YARN_WORKER_PACKAGE_PATH_DOC)
+				.define(YARN_TASK_COUNT, Type.STRING, Importance.HIGH, YARN_TASK_COUNT_DOC);
 	}
 	
 	

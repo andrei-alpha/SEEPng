@@ -1,6 +1,7 @@
 package uk.ac.imperial.lsds.seepcontrib.yarn.client;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -95,6 +96,10 @@ public class SeepYarnAppSubmissionClient {
         resource.setMemory(maxMemory);
         resource.setVirtualCores(maxCores);
         appContext.setResource(resource);
+        
+        HashMap<String, LocalResource> packageResourceMap = new HashMap<String, LocalResource>();
+        packageResourceMap.put("__package", packageResource);
+        containerCtx.setLocalResources(packageResourceMap);
         
         //TODO: set commands to run on application
         appContext.setAMContainerSpec(containerCtx);
