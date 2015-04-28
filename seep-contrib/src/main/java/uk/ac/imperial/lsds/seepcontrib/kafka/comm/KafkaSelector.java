@@ -14,19 +14,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.imperial.lsds.seep.core.InputAdapter;
-import uk.ac.imperial.lsds.seep.errors.NotImplementedException;
 
 public class KafkaSelector {
 
 	final private static Logger LOG = LoggerFactory.getLogger(KafkaSelector.class);
 	
+	private boolean working = true;
 	private final ConsumerConnector consumer;
 	private Reader[] readers;
 	
 	private int numReaderWorkers;
 	private Thread[] readerWorkers;
-	
-	private Map<Integer, InputAdapter> dataAdapters;
 	
 	public KafkaSelector(String baseTopic, String zookeeperServer, String groupId, Map<Integer, InputAdapter> dataAdapters) {
 		Properties consumerProps = new Properties();
@@ -36,7 +34,6 @@ public class KafkaSelector {
 				
 		this.consumer = kafka.consumer.Consumer.createJavaConsumerConnector(new ConsumerConfig(consumerProps));
 		
-		this.dataAdapters = dataAdapters;
 		numReaderWorkers = dataAdapters.size();
 		readers = new Reader[numReaderWorkers];
 		readerWorkers = new Thread[numReaderWorkers];
@@ -52,6 +49,8 @@ public class KafkaSelector {
         int threadNumber = 0;
         for (Map.Entry<Integer, InputAdapter> entry : dataAdapters.entrySet()) {
         	String topic = baseTopic + String.valueOf(entry.getValue().getStreamId());
+        	LOG.info("Create unique topic " + topic);
+        	
         	List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(topic);
  
         	readers[threadNumber] = new Reader(streams.get(0), entry.getValue());
@@ -71,8 +70,7 @@ public class KafkaSelector {
 	}
 	
 	public void stopKafkaSelector(){
-		// TODO: do this
-		throw new NotImplementedException("stopKafkaSelector not implemented!!");
+		working = false;
 	}
 
 	class Reader implements Runnable {
@@ -88,7 +86,7 @@ public class KafkaSelector {
 		@Override
 		public void run() {
 			ConsumerIterator<byte[], byte[]> it = stream.iterator();
-	        while (it.hasNext()) {
+	        while (working && it.hasNext()) {
 	        	byte[] data = it.next().message();
 
 	        	ia.pushData(data);

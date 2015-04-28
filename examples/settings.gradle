@@ -7,4 +7,6 @@ include \
 	"simple-pipeline-stateful-query",
 	"simple-cycle-stateless-query",
 	"simple-sourcefile-stateless-query",
-	"simple-kafka-stateless-pipeline"
+	"simple-kafka-stateless-pipeline",
+  "kafka-cpu-pipeline",
+  "kafka-io-pipeline"

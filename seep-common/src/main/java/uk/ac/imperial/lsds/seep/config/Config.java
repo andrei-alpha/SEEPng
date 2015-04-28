@@ -18,7 +18,7 @@ import uk.ac.imperial.lsds.seep.util.Utils;
  */
 public class Config {
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    final private static Logger log = LoggerFactory.getLogger(Config.class);
 
     /* configs for which values have been requested, used to detect unused configs */
     private final Set<String> used;
