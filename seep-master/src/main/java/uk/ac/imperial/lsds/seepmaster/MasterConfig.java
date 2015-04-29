@@ -33,7 +33,10 @@ public class MasterConfig extends Config {
     private static final String PROPERTIES_FILE_DOC = "Optional argument to indicate a properties file";
 	
     public static final String WORKER_PACKAGE_PATH = "worker.package.path";
-    public static final String WORKER_PACKAGE_PATH_DOC = "Relative path to the worker package. Used only if master deploys workers itself.";
+    private static final String WORKER_PACKAGE_PATH_DOC = "Relative path to the worker package. Used only if master deploys workers itself.";
+    
+    public static final String AUTO_DEPLOYMENT = "auto.deployment";
+    private static final String AUTO_DEPLOYMENT_DOC = "If this is true master will deploy and start the query automatically";
     
 	static{
 		config = new ConfigDef().define(QUERY_FILE, Type.STRING, "", Importance.HIGH, QUERY_FILE_DOC)
@@ -42,7 +45,8 @@ public class MasterConfig extends Config {
 				.define(LISTENING_PORT, Type.INT, 3500, Importance.HIGH, LISTENING_PORT_DOC)
 				.define(UI_TYPE, Type.INT, 0, Importance.HIGH, UI_TYPE_DOC)
 				.define(PROPERTIES_FILE, Type.STRING, Importance.LOW, PROPERTIES_FILE_DOC)
-				.define(WORKER_PACKAGE_PATH, Type.STRING, "", Importance.LOW, WORKER_PACKAGE_PATH_DOC);
+				.define(WORKER_PACKAGE_PATH, Type.STRING, "", Importance.LOW, WORKER_PACKAGE_PATH_DOC)
+				.define(AUTO_DEPLOYMENT, Type.BOOLEAN, false, Importance.HIGH, AUTO_DEPLOYMENT_DOC);
 	}
 	
 	public MasterConfig(Map<? extends Object, ? extends Object> originals) {

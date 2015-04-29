@@ -40,6 +40,15 @@ public class YarnConfig extends Config {
     public static final String YARN_RESOURCE_MANAGER_HOSTNAME = "yarn.resourcemanager.hostname";
     private static final String YARN_RESOURCE_MANAGER_HOSTNAME_DOC = "The hostname where the resoucemanager lives.";
     
+    public static final String YARN_AUTO_DEPLOYMENT = "auto.deployment";
+    private static final String YARN_AUTO_DEPLOYMENT_DOC = "If this is true master will deploy and start the query automatically";
+    
+    public static final String YARN_QUERY_FILE = "query.file";
+    private static final String YARN_QUERY_FILE_DOC = "The file where user queries are specified";
+    
+    public static final String YARN_BASECLASS_NAME = "baseclass.name";
+    private static final String YARN_BASECLASS_NAME_DOC = "The name of the Base class where the query is composed";
+    
     static{
 		config = new ConfigDef().define(YARN_PROPERTIES_FILE, Type.STRING, Importance.LOW, YARN_PROPERTIES_FILE_DOC)
 				.define(YARN_CONTAINER_MEMORY_MB, Type.INT, 256, Importance.HIGH, YARN_CONTAINER_MEMORY_MB_DOC)
@@ -49,7 +58,10 @@ public class YarnConfig extends Config {
 				.define(YARN_APPMASTER_LISTENING_PORT, Type.INT, 3500, Importance.HIGH, YARN_APPMASTER_LISTENING_PORT_DOC)
 				.define(YARN_WORKER_LISTENING_PORT, Type.INT, 3500, Importance.HIGH, YARN_WORKER_LISTENING_PORT_DOC)
 				.define(YARN_WORKER_DATA_PORT, Type.INT, 5000, Importance.HIGH, YARN_WORKER_DATA_PORT_DOC)
-				.define(YARN_RESOURCE_MANAGER_HOSTNAME, Type.STRING, "0.0.0.0", Importance.HIGH, YARN_RESOURCE_MANAGER_HOSTNAME_DOC);
+				.define(YARN_RESOURCE_MANAGER_HOSTNAME, Type.STRING, "0.0.0.0", Importance.HIGH, YARN_RESOURCE_MANAGER_HOSTNAME_DOC)
+				.define(YARN_AUTO_DEPLOYMENT, Type.BOOLEAN, false, Importance.HIGH, YARN_AUTO_DEPLOYMENT_DOC)
+				.define(YARN_QUERY_FILE, Type.STRING, "", Importance.HIGH, YARN_QUERY_FILE_DOC)
+				.define(YARN_BASECLASS_NAME, Type.STRING, "", Importance.HIGH, YARN_BASECLASS_NAME_DOC);
 	}
 	
 	

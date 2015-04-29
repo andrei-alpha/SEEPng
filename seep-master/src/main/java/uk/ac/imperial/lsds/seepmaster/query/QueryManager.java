@@ -85,7 +85,7 @@ public class QueryManager {
 		}
 	}
 	
-	private boolean canStartExecution(){
+	public boolean canStartExecution(){
 		return inf.executionUnitsAvailable() >= executionUnitsRequiredToStart;
 	}
 	

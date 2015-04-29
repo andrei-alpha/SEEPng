@@ -67,6 +67,34 @@ public class Main {
 				throw new InvalidLifecycleStatusException("Could not load query due to attempt to violate app lifecycle");
 			}
 			LOG.info("Loading query...OK");
+		
+			if (mc.getBoolean(MasterConfig.AUTO_DEPLOYMENT) == true) {
+				// Wait for worker nodes
+				while (!qm.canStartExecution()) {
+					LOG.info("Waiting for workers...");
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
+				success = qm.deployQueryToNodes();
+				LOG.info("Deploying query to nodes...");
+				if (!success) {
+					LOG.warn("Could not deploy query");
+				} else {
+					LOG.info("Deploying query to nodes...OK");
+					
+					LOG.info("Starting query...");
+					success = qm.startQuery();
+					if(!success){
+						LOG.warn("Could not start query");
+					} else {
+						LOG.info("Starting query...OK");
+					}
+				}
+			}
 		}
 		
 		ui.start();

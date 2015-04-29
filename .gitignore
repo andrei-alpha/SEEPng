@@ -42,6 +42,10 @@ examples/simple-pipeline-stateless-barrier-query/build/*
 examples/simple-kafka-stateless-pipeline/.gitignore/
 examples/simple-kafka-stateless-pipeline/.settings/
 examples/simple-kafka-stateless-pipeline/build/*
+examples/kafka-cpu-pipeline/.settings/
+examples/kafka-cpu-pipeline/build/*
+examples/kafka-io-pipeline/.settings/
+examples/kafka-io-pipeline/build/*
 examples/static-scaleout-pipeline-stateful-query/.settings/
 examples/static-scaleout-pipeline-stateful-query/build/
 deploy/

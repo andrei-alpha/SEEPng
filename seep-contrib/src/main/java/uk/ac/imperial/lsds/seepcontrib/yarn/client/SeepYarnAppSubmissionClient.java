@@ -79,6 +79,12 @@ public class SeepYarnAppSubmissionClient {
                     appCores, appResponse.getMaximumResourceCapability().getVirtualCores()));
         }
         
+        // Get the absolute path of query file
+        String absolutePath = "";
+        if (yc.getString(YarnConfig.YARN_QUERY_FILE) != "") {
+            absolutePath = new File(yc.getString(YarnConfig.YARN_QUERY_FILE)).getAbsolutePath();
+        }
+            
         // Set up the container launch context for the application master
         ContainerLaunchContext amContainer = Records.newRecord(ContainerLaunchContext.class);
         amContainer.setCommands(
@@ -92,6 +98,9 @@ public class SeepYarnAppSubmissionClient {
                 " --" + YarnConfig.YARN_WORKER_PACKAGE_PATH + " " + yc.getString(YarnConfig.YARN_WORKER_PACKAGE_PATH) +
                 " --" + YarnConfig.YARN_WORKER_LISTENING_PORT + " " + yc.getInt(YarnConfig.YARN_WORKER_LISTENING_PORT) +
                 " --" + YarnConfig.YARN_WORKER_DATA_PORT + " " + yc.getInt(YarnConfig.YARN_WORKER_DATA_PORT) +
+                " --" + YarnConfig.YARN_AUTO_DEPLOYMENT + " " + yc.getBoolean(YarnConfig.YARN_AUTO_DEPLOYMENT) +
+                " --" + YarnConfig.YARN_BASECLASS_NAME + " " + yc.getString(YarnConfig.YARN_BASECLASS_NAME) +
+                " --" + YarnConfig.YARN_QUERY_FILE + " " + absolutePath +
                 " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" + 
                 " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr"
                 )
