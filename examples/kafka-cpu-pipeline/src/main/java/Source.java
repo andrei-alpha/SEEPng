@@ -39,29 +39,22 @@ public class Source implements SeepTask {
             x = rand.nextInt(max - min) + min;
         return x;
     }
-    
-    private static long modPow(long x, long p, long mod) {
-        long res = 1;
-        long a = x;
-        while(p > 0){
-            if(p % 2 == 1){
-                res = (res * a) % mod;
-            }
-            a = (a * a) % mod;
-            p /= 2;
-        }
-        if (res < 0)
-            res += mod;
-        return res;
-    }
 	
+    private static long modPow(long x, long p, long mod) {
+        BigInteger b1 = new BigInteger(String.valueOf(x));
+        BigInteger b2 = new BigInteger(String.valueOf(p));
+        BigInteger b3 = new BigInteger(String.valueOf(mod));
+        
+        return b1.modPow(b2, b3).longValue();
+    }
+    
 	@Override
 	public void processData(ITuple data, API api) {
 		long ts = 0;
 		while(working){
 		    // RSA
-		    long p = getRandomPrime(20000, 35000);
-	        long q = getRandomPrime(35000, 50000);
+		    long p = getRandomPrime(800000000, 900000000);
+	        long q = getRandomPrime(900000000, 1000000000);
 	        long N = p * q;
 	        long e;
 	        
@@ -71,10 +64,12 @@ public class Source implements SeepTask {
 	            ++e;
 
 	        Random rand = new Random();
-	        long x = rand.nextInt((int)N);
+	        long x = rand.nextLong() % N;
+	        if (x < 0) 
+	            x += N;
 	        long ex = modPow(x, e, N);
 		    
-	        System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, (int)x);
+	        //System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, (int)x);
 	        System.out.println("[Source] ts: " + ts + " original text: " + x);
 	        
 			byte[] output = OTuple.create(schema, new String[]{"ts", "pubE", "pubModulus", "secret"}, new Object[]{ts, e, N, ex});

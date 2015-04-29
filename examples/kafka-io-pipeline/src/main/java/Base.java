@@ -14,27 +14,26 @@ import uk.ac.imperial.lsds.seepcontrib.kafka.config.KafkaConfig;
 
 public class Base implements QueryComposer {
 
-    private KafkaConfig kafkaConfig;
-    
-    public Base() {
-        Properties p = new Properties();
-        p.setProperty(KafkaConfig.KAFKA_SERVER, "localhost:9092");
-        p.setProperty(KafkaConfig.ZOOKEEPER_CONNECT, "localhost:2181");
-        p.setProperty(KafkaConfig.PRODUCER_CLIENT_ID, "seep");
-        p.setProperty(KafkaConfig.CONSUMER_GROUP_ID, "seep");
-        p.setProperty(KafkaConfig.BASE_TOPIC, "seep");
-        
-        kafkaConfig = new KafkaConfig(p);
-    }
-    
+	private final KafkaConfig kafkaConfig;
+	
+	public Base() {
+		Properties p = new Properties();
+		p.setProperty(KafkaConfig.KAFKA_SERVER, "localhost:9092");
+		p.setProperty(KafkaConfig.ZOOKEEPER_CONNECT, "localhost:2181");
+		p.setProperty(KafkaConfig.PRODUCER_CLIENT_ID, "seep");
+		p.setProperty(KafkaConfig.CONSUMER_GROUP_ID, "seep");
+		p.setProperty(KafkaConfig.BASE_TOPIC, "seep");
+		
+		kafkaConfig = new KafkaConfig(p);
+	}
+	
 	@Override
 	public LogicalSeepQuery compose() {
-	    System.out.println("[Base] Start to build query");
+		System.out.println("[Base] Start to build query");
 		
-		Schema schema = SchemaBuilder.getInstance().newField(Type.LONG, "ts")
-		                                           .newField(Type.LONG, "pubE")
-		                                           .newField(Type.LONG, "pubModulus")
-												   .newField(Type.LONG, "secret").build();
+		Schema schema = SchemaBuilder.getInstance().newField(Type.INT, "ts")
+		                                           .newField(Type.INT, "key")
+												   .newField(Type.STRING, "text").build();
 		
 		LogicalOperator src = queryAPI.newStatelessSource(new Source(), 0);
 		LogicalOperator processor = queryAPI.newStatelessOperator(new Processor(), 1);

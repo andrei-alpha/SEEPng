@@ -27,18 +27,11 @@ public class Processor implements SeepTask {
     }
 	
 	private static long modPow(long x, long p, long mod) {
-	    long res = 1;
-        long a = x;
-        while(p > 0){
-            if(p % 2 == 1){
-                res = (res * a) % mod;
-            }
-            a = (a * a) % mod;
-            p /= 2;
-        }
-        if (res < 0)
-            res += mod;
-        return res;
+	    BigInteger b1 = new BigInteger(String.valueOf(x));
+	    BigInteger b2 = new BigInteger(String.valueOf(p));
+	    BigInteger b3 = new BigInteger(String.valueOf(mod));
+	    
+	    return b1.modPow(b2, b3).longValue();
     }
 	
 	@Override
@@ -55,7 +48,7 @@ public class Processor implements SeepTask {
             ++p;
         q = N / p;
 
-        System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, -1);    
+        //System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, -1);    
         
         long d = inverse(e, (p - 1) * (q - 1));
         long dx = modPow(ex, d, N);
