@@ -118,7 +118,11 @@ public class Main {
 			System.exit(0);
 		}
 		
+		// TODO: remove this line after benchmarks
+		validatedProperties.setProperty(WorkerConfig.REPORT_METRICS_CONSOLE_PERIOD, "30");
+		
 		WorkerConfig wc = new WorkerConfig(validatedProperties);
+
 		Main instance = new Main();
 		instance.executeWorker(wc);
 	}
