@@ -29,7 +29,7 @@ public class Source implements SeepTask {
 		    int key = 0;
 		    
 		    // Create 100Kb text and send it over the network
-		    String text = new BigInteger(512000, random).toString(32);
+		    String text = new BigInteger(256000, random).toString(32);
 		    key = random.nextInt(128);
 
 		    System.out.println("[Source] ts: " + ts + " text size: " + text.length() + " hash: " + text.hashCode());
