@@ -1,4 +1,6 @@
+import java.math.BigInteger;
 import java.util.Properties;
+import java.util.Random;
 
 import uk.ac.imperial.lsds.seep.api.DataStore;
 import uk.ac.imperial.lsds.seep.api.DataStoreType;
@@ -16,17 +18,16 @@ public class Base implements QueryComposer {
 	private final Properties p;
 	
 	public Base() {
-		
-		Properties p = new Properties();
+		p = new Properties();
 		p.setProperty(KafkaConfig.KAFKA_SERVER, "localhost:9092");
 		p.setProperty(KafkaConfig.ZOOKEEPER_CONNECT, "localhost:2181");
-		p.setProperty(KafkaConfig.PRODUCER_CLIENT_ID, "seep");
-		p.setProperty(KafkaConfig.CONSUMER_GROUP_ID, "seep");
-		p.setProperty(KafkaConfig.BASE_TOPIC, "seep");
 		
-		// TODO: have a validator method in KafkaConfig here...
-		
-		this.p = p;
+		// Generate a unique topic for this task
+        Random random = new Random();
+        String topic = "seep-" + new BigInteger(50, random).toString(32);
+        p.setProperty(KafkaConfig.PRODUCER_CLIENT_ID, topic);
+        p.setProperty(KafkaConfig.CONSUMER_GROUP_ID, topic);
+        p.setProperty(KafkaConfig.BASE_TOPIC, topic);
 	}
 	
 	@Override
