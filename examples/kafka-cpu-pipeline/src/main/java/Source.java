@@ -71,7 +71,7 @@ public class Source implements SeepTask {
             long ex = modPow(x, e, N);
         	    
             //System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, (int)x);
-            System.out.println("[Source] ts: " + ts + " original text: " + x);
+            //System.out.println("[Source] ts: " + ts + " original text: " + x);
                 
         	byte[] output = OTuple.create(schema, new String[]{"ts", "pubE", "pubModulus", "secret"}, new Object[]{ts, e, N, ex});
         	api.send(output);

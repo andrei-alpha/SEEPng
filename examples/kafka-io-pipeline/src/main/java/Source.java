@@ -32,7 +32,7 @@ public class Source implements SeepTask {
 		    String text = new BigInteger(256000, random).toString(32);
 		    key = random.nextInt(128);
 
-		    System.out.println("[Source] ts: " + ts + " text size: " + text.length() + " hash: " + text.hashCode());
+		    //System.out.println("[Source] ts: " + ts + " text size: " + text.length() + " hash: " + text.hashCode());
 			byte[] d = OTuple.create(schema, new String[]{"ts", "key", "text"}, new Object[]{ts, key, text});
 			api.send(d);
 			

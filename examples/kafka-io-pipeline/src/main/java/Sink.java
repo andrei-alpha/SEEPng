@@ -22,7 +22,7 @@ public class Sink implements SeepTask {
         String original = sb.toString();
         
         int hash = original.hashCode();
-		System.out.println("[Sink] ts: " + ts + " text size: " + original.length() + " hash: " + hash);
+		//System.out.println("[Sink] ts: " + ts + " text size: " + original.length() + " hash: " + hash);
 	}
 
 	@Override
