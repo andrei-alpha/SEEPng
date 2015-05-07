@@ -20,8 +20,8 @@ public class Base implements QueryComposer {
 	
 	public Base() {
 		p = new Properties();
-		p.setProperty(KafkaConfig.KAFKA_SERVER, "wombat02:9092");
-		p.setProperty(KafkaConfig.ZOOKEEPER_CONNECT, "wombat02:2181");
+		p.setProperty(KafkaConfig.KAFKA_SERVER, "localhost:9092");
+		p.setProperty(KafkaConfig.ZOOKEEPER_CONNECT, "localhost:2181");
 		
 		// Generate a unique topic for this task
         Random random = new Random();
