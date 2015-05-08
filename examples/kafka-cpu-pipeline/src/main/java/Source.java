@@ -77,7 +77,6 @@ public class Source implements SeepTask {
         	api.send(output);
         		
         	ts++;
-        	waitHere(100);
 		}
 	}
 	
