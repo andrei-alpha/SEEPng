@@ -41,7 +41,7 @@ public class Processor implements SeepTask {
 		long N = data.getLong("pubModulus");
 		long ex = data.getLong("secret");
 		
-		System.out.println("[Processor] ts: " + ts + " crypted text: " + ex);
+		//System.out.println("[Processor] ts: " + ts + " crypted text: " + ex);
 		
 		long p = 2, q = 1;
         while(N % p != 0)

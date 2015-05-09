@@ -33,7 +33,7 @@ public class Base implements QueryComposer {
     
 	@Override
 	public LogicalSeepQuery compose() {
-	    System.out.println("[Base] Start to build query");
+	  System.out.println("[Base] Start to build query");
 		
 		Schema schema = SchemaBuilder.getInstance().newField(Type.LONG, "ts")
 		                                           .newField(Type.LONG, "pubE")
