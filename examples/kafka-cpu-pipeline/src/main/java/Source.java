@@ -54,8 +54,8 @@ public class Source implements SeepTask {
 	    
 	    while(working){
     	    // RSA
-    	    long p = getRandomPrime(80000, 90000);
-          long q = getRandomPrime(90000, 100000);
+    	    long p = getRandomPrime(570000, 630000);
+          long q = getRandomPrime(630000, 6700000);
           long N = p * q;
           long e;
                 
