@@ -52,7 +52,7 @@ public class PhysicalSeepQuery {
 		return psq;
 	}
 	
-	private static Operator findOperator(int opId, Set<SeepQueryPhysicalOperator> physicalOperators){
+	public static Operator findOperator(int opId, Set<SeepQueryPhysicalOperator> physicalOperators){
 		for(SeepQueryPhysicalOperator o : physicalOperators){
 			if(o.getOperatorId() == opId){
 				return o;

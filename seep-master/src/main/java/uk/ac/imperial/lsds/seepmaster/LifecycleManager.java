@@ -55,6 +55,10 @@ public class LifecycleManager {
 		}
 	}
 
+	public AppStatus getStatus() {
+	    return this.status;
+	}
+	
 	public boolean canTransitTo(AppStatus newStatus) {
 		return status.canTransitTo(newStatus);
 	}

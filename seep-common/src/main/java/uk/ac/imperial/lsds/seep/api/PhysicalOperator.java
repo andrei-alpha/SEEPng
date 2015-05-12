@@ -6,6 +6,7 @@ public interface PhysicalOperator extends Operator{
 	
 	public int getIdOfWrappingExecutionUnit();
 	public EndPoint getWrappingEndPoint();
+	public void replaceWrappingEndPoint(EndPoint ep);
 	public String toString();
 	
 }

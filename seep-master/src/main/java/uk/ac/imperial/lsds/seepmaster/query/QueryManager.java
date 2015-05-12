@@ -7,8 +7,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -32,6 +34,7 @@ import uk.ac.imperial.lsds.seep.infrastructure.InfrastructureManager;
 import uk.ac.imperial.lsds.seep.util.Utils;
 import uk.ac.imperial.lsds.seepcontrib.yarn.infrastructure.YarnClusterManager;
 import uk.ac.imperial.lsds.seepmaster.LifecycleManager;
+import uk.ac.imperial.lsds.seepmaster.LifecycleManager.AppStatus;
 
 import com.esotericsoftware.kryo.Kryo;
 
@@ -48,6 +51,7 @@ public class QueryManager {
 	private int executionUnitsRequiredToStart;
 	private InfrastructureManager inf;
 	private Map<Integer, EndPoint> opToEndpointMapping;
+	private List<Integer> deadWorkers;
 	private final Comm comm;
 	private final Kryo k;
 	
@@ -65,6 +69,7 @@ public class QueryManager {
 		this.inf = inf;
 		this.opToEndpointMapping = mapOpToEndPoint;
 		this.comm = comm;
+		this.deadWorkers = new ArrayList<Integer>();
 		this.k = KryoFactory.buildKryoForMasterWorkerProtocol();
 	}
 	
@@ -73,6 +78,7 @@ public class QueryManager {
 		this.opToEndpointMapping = mapOpToEndPoint;
 		this.comm = comm;
 		this.lifeManager = lifeManager;
+		this.deadWorkers = new ArrayList<Integer>();
 		this.k = KryoFactory.buildKryoForMasterWorkerProtocol();
 	}
 	
@@ -110,6 +116,49 @@ public class QueryManager {
 		}
 		
 		return true;
+	}
+	
+	public void newDeadWorker(int workerId) {
+	    deadWorkers.add(workerId);
+	}
+	
+	public void newNodeDiscovered() {
+	    if ((lifeManager.getStatus() != AppStatus.QUERY_DEPLOYED && 
+	            lifeManager.getStatus() != AppStatus.QUERY_RUNNING) ||
+	            deadWorkers.size() == 0) {
+	        return;
+	    }
+	    // A new node appeared that can replace a dead one
+	    int replacedWorkerId = deadWorkers.remove(0); 
+	    int replacedOperatorId = -1;
+	    for (Map.Entry<Integer, EndPoint> entry : opToEndpointMapping.entrySet()) {
+	        if (entry.getValue().getId() == replacedWorkerId) {
+	            replacedOperatorId = entry.getKey();
+	        }
+	    }
+	    LOG.info("New node will replace {} on : {}", replacedOperatorId, replacedWorkerId);
+	    
+	    ExecutionUnit eu = inf.getExecutionUnit();
+	    EndPoint ep = eu.getEndPoint();
+        Set<Integer> euIds = new HashSet<Integer>();
+        euIds.add(eu.getId());
+        
+        List<SeepQueryPhysicalOperator> lst = new ArrayList<>();
+        originalQuery.getOperators().forEach((op) -> lst.add((SeepQueryPhysicalOperator) op));
+        Set<SeepQueryPhysicalOperator> physicalOperators = new HashSet<>();
+        physicalOperators.addAll(lst);
+        
+        SeepQueryPhysicalOperator po = (SeepQueryPhysicalOperator) PhysicalSeepQuery.findOperator(replacedOperatorId, physicalOperators);
+        po.replaceWrappingEndPoint(ep);
+        
+	    Set<Connection> connection = inf.getConnectionsTo(euIds);
+	    sendQueryInformationToNodes(connection);
+	    
+	    if (lifeManager.getStatus() == AppStatus.QUERY_RUNNING) {
+	        // Send start query command so we resume the query running state
+	        MasterWorkerCommand start = ProtocolCommandFactory.buildStartQueryCommand();
+	        comm.send_object_sync(start, connection, k);
+	    }
 	}
 	
 	public boolean deployQueryToNodes() {

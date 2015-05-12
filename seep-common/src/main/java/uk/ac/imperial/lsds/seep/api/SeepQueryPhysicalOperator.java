@@ -16,7 +16,7 @@ public class SeepQueryPhysicalOperator implements PhysicalOperator{
 	private boolean stateful = false;
 	private List<DownstreamConnection> downstreamConnections;
 	private List<UpstreamConnection> upstreamConnections;
-	private final EndPoint ep;
+	private EndPoint ep;
 	
 	
 	private SeepQueryPhysicalOperator(int opId, String name, SeepTask seepTask, 
@@ -130,6 +130,11 @@ public class SeepQueryPhysicalOperator implements PhysicalOperator{
 	public EndPoint getWrappingEndPoint(){
 		return ep;
 	}
+	
+	@Override
+	public void replaceWrappingEndPoint(EndPoint ep) {
+	    this.ep = ep;
+	};
 	
 	@Override
 	public String toString(){

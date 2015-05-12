@@ -38,6 +38,8 @@ public class MasterWorkerAPIImplementation {
 		LOG.info("New worker node in {}:{}, dataPort: {}", bootIp.toString(), port, dataPort);
 		ExecutionUnit eu = inf.buildExecutionUnit(bootIp, port, dataPort);
 		inf.addExecutionUnit(eu);
+		
+		qm.newNodeDiscovered();
 	}
 	
 	public void handleDeadWorker(DeadWorkerCommand dwc){
@@ -45,6 +47,8 @@ public class MasterWorkerAPIImplementation {
 		String reason = dwc.reason();
 		LOG.warn("Worker {} has died, reason: {}", workerId, reason);
 		inf.removeExecutionUnit(workerId);
+		
+		qm.newDeadWorker(workerId);
 	}
 	
 }
