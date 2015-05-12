@@ -15,7 +15,7 @@ public class Sink implements SeepTask {
 		long ts = data.getLong("ts");
 		long secret = data.getLong("secret");
 		
-		//System.out.println("[Sink] ts: " + ts + " decrypted text: " + secret);
+		System.out.println("[Sink] ts: " + ts + " decrypted text: " + secret);
 	}
 
 	@Override

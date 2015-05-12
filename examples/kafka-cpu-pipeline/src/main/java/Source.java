@@ -54,8 +54,8 @@ public class Source implements SeepTask {
 	    
 	    while(working){
     	    // RSA
-    	    long p = getRandomPrime(570000, 630000);
-          long q = getRandomPrime(630000, 6700000);
+    	    long p = getRandomPrime(57000, 63000);
+          long q = getRandomPrime(63000, 670000);
           long N = p * q;
           long e;
                 
@@ -71,12 +71,13 @@ public class Source implements SeepTask {
           long ex = modPow(x, e, N);
         	    
           //System.out.printf("RSA: p=%d q=%d e=%d d=?\n x=%d", (int)p, (int)q, (int)e, (int)x);
-          //System.out.println("[Source] ts: " + ts + " original text: " + x);
+          System.out.println("[Source] ts: " + ts + " original text: " + x);
                 
         	byte[] output = OTuple.create(schema, new String[]{"ts", "pubE", "pubModulus", "secret"}, new Object[]{ts, e, N, ex});
         	api.send(output);
         		
         	ts++;
+        	waitHere(1000);
 		}
 	}
 	
