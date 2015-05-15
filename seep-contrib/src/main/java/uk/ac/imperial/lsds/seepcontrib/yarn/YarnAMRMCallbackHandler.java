@@ -40,7 +40,7 @@ public class YarnAMRMCallbackHandler implements AMRMClientAsync.CallbackHandler 
         LOG.info("Got response from RM for container ask, allocatedCnt=" + containers.size());
         
         for (Container container : containers) {
-            LOG.info("Allocated yarn container with id: {}", container.getId());
+            LOG.info("Allocated yarn container with id: {} on {}", container.getId(), container.getNodeId());
             allocatedYarnContainers.push(container);
             
             // Launch the container in a separate thread

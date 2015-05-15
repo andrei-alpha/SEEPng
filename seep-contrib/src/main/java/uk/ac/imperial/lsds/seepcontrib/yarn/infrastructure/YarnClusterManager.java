@@ -1,8 +1,13 @@
 package uk.ac.imperial.lsds.seepcontrib.yarn.infrastructure;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -131,6 +136,25 @@ public class YarnClusterManager implements InfrastructureManager {
                 + " previous AM's running containers on AM registration.");
     }
     
+    public List<String> getPreferredHosts() {
+        List<String> hosts = new ArrayList<>();
+        try {
+            String server = yc.getString(YarnConfig.YARN_SCHEDULER_HOST);
+            URL resourceReport = new URL(server + "/scheduler/host");
+            URLConnection urlConn = resourceReport.openConnection();
+            BufferedReader in = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+            String inputLine;
+            
+            while ((inputLine = in.readLine()) != null) { 
+                hosts.add(inputLine);
+            }
+            in.close();
+        } catch (Exception e) {
+            hosts.add("*");
+        }
+        return hosts;
+    }
+    
     public void requestContainer() {
         Resource capability = Records.newRecord(Resource.class);
         Priority priority = Records.newRecord(Priority.class);
@@ -138,8 +162,13 @@ public class YarnClusterManager implements InfrastructureManager {
         capability.setMemory(containerMemory);
         capability.setVirtualCores(containerCores);
         
+        List<String> preferredHosts = getPreferredHosts();
+        String[] hosts = new String[preferredHosts.size()];
+        hosts = preferredHosts.toArray(hosts);
+        LOG.info("Preffered host for next container is {}", hosts[0]);
+        
         AMRMClient.ContainerRequest request =
-                new AMRMClient.ContainerRequest(capability, null, null, priority);
+                new AMRMClient.ContainerRequest(capability, hosts, null, priority, false);
         amClient.addContainerRequest(request);
         
         LOG.info("Submit container request: " + request.toString());

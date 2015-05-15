@@ -100,6 +100,7 @@ public class SeepYarnAppSubmissionClient {
                 " --" + YarnConfig.YARN_WORKER_DATA_PORT + " " + yc.getInt(YarnConfig.YARN_WORKER_DATA_PORT) +
                 " --" + YarnConfig.YARN_AUTO_DEPLOYMENT + " " + yc.getBoolean(YarnConfig.YARN_AUTO_DEPLOYMENT) +
                 " --" + YarnConfig.YARN_BASECLASS_NAME + " " + yc.getString(YarnConfig.YARN_BASECLASS_NAME) +
+                " --" + YarnConfig.YARN_SCHEDULER_HOST + " " + yc.getString(YarnConfig.YARN_SCHEDULER_HOST) +
                 " --" + YarnConfig.YARN_QUERY_FILE + " " + absolutePath +
                 " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" + 
                 " 2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stderr"

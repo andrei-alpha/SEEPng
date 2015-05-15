@@ -49,6 +49,9 @@ public class YarnConfig extends Config {
     public static final String YARN_BASECLASS_NAME = "baseclass.name";
     private static final String YARN_BASECLASS_NAME_DOC = "The name of the Base class where the query is composed";
     
+    public static final String YARN_SCHEDULER_HOST = "scheduler.host";
+    private static final String YARN_SCHEDULER_HOST_DOC = "The host of the scheduler to query for container allocation.";
+    
     static{
 		config = new ConfigDef().define(YARN_PROPERTIES_FILE, Type.STRING, Importance.LOW, YARN_PROPERTIES_FILE_DOC)
 				.define(YARN_CONTAINER_MEMORY_MB, Type.INT, 512, Importance.HIGH, YARN_CONTAINER_MEMORY_MB_DOC)
@@ -61,7 +64,8 @@ public class YarnConfig extends Config {
 				.define(YARN_RESOURCE_MANAGER_HOSTNAME, Type.STRING, "0.0.0.0", Importance.HIGH, YARN_RESOURCE_MANAGER_HOSTNAME_DOC)
 				.define(YARN_AUTO_DEPLOYMENT, Type.BOOLEAN, false, Importance.HIGH, YARN_AUTO_DEPLOYMENT_DOC)
 				.define(YARN_QUERY_FILE, Type.STRING, "", Importance.HIGH, YARN_QUERY_FILE_DOC)
-				.define(YARN_BASECLASS_NAME, Type.STRING, "", Importance.HIGH, YARN_BASECLASS_NAME_DOC);
+				.define(YARN_BASECLASS_NAME, Type.STRING, "", Importance.HIGH, YARN_BASECLASS_NAME_DOC)
+				.define(YARN_SCHEDULER_HOST, Type.STRING, "", Importance.MEDIUM, YARN_SCHEDULER_HOST_DOC);
 	}
 	
 	
