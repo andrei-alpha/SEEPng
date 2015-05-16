@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import uk.ac.imperial.lsds.seep.api.LogicalSeepQuery;
 import uk.ac.imperial.lsds.seep.api.Operator;
-import uk.ac.imperial.lsds.seep.api.PhysicalOperator;
 import uk.ac.imperial.lsds.seep.api.PhysicalSeepQuery;
 import uk.ac.imperial.lsds.seep.api.SeepQueryPhysicalOperator;
 import uk.ac.imperial.lsds.seep.comm.Comm;
@@ -122,11 +122,11 @@ public class QueryManager {
 	    deadWorkers.add(workerId);
 	}
 	
-	public void newNodeDiscovered() {
+	public boolean newNodeDiscovered() {
 	    if ((lifeManager.getStatus() != AppStatus.QUERY_DEPLOYED && 
 	            lifeManager.getStatus() != AppStatus.QUERY_RUNNING) ||
 	            deadWorkers.size() == 0) {
-	        return;
+	        return false;
 	    }
 	    // A new node appeared that can replace a dead one
 	    int replacedWorkerId = deadWorkers.remove(0); 
@@ -159,6 +159,51 @@ public class QueryManager {
 	        MasterWorkerCommand start = ProtocolCommandFactory.buildStartQueryCommand();
 	        comm.send_object_sync(start, connection, k);
 	    }
+	    return true;
+	}
+	
+	public boolean stopNode(Integer euId) {
+	    if (lifeManager.getStatus() != AppStatus.QUERY_RUNNING &&
+	            lifeManager.getStatus() != AppStatus.QUERY_DEPLOYED) {
+            return false;
+        }
+	    
+	    Set<Integer> involvedEUId = new HashSet<Integer>(Arrays.asList(euId));
+        Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
+        
+        // Send stop query command
+        MasterWorkerCommand stop = ProtocolCommandFactory.buildStopQueryCommand();
+        comm.send_object_sync(stop, connections, k);
+	    return true;
+	}
+	
+	public boolean resumeNode(Integer euId) {
+	    if (lifeManager.getStatus() != AppStatus.QUERY_RUNNING) {
+            return false;
+        }
+	    
+	    Set<Integer> involvedEUId = new HashSet<Integer>(Arrays.asList(euId));
+        Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
+
+        // Send start query command
+        MasterWorkerCommand start = ProtocolCommandFactory.buildStartQueryCommand();
+        comm.send_object_sync(start, connections, k);
+	    return true;
+	}
+	
+	public boolean exitNode(Integer euId) {
+	    if (lifeManager.getStatus() != AppStatus.QUERY_RUNNING &&
+                lifeManager.getStatus() != AppStatus.QUERY_DEPLOYED) {
+            return false;
+        }
+	    
+	    Set<Integer> involvedEUId = new HashSet<Integer>(Arrays.asList(euId));
+        Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
+        
+        // Send exit query command
+        MasterWorkerCommand exit = ProtocolCommandFactory.buildExitQueryCommand();
+        comm.send_object_sync(exit, connections, k);
+	    return true;
 	}
 	
 	public boolean deployQueryToNodes() {

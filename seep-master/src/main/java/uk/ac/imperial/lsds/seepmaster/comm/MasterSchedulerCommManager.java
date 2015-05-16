@@ -1,6 +1,5 @@
 package uk.ac.imperial.lsds.seepmaster.comm;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -12,28 +11,17 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import uk.ac.imperial.lsds.seep.comm.protocol.BootstrapCommand;
-import uk.ac.imperial.lsds.seep.comm.protocol.DeadWorkerCommand;
-import uk.ac.imperial.lsds.seep.comm.protocol.MasterWorkerCommand;
-import uk.ac.imperial.lsds.seep.comm.protocol.MasterWorkerProtocolAPI;
-import uk.ac.imperial.lsds.seep.comm.serialization.KryoFactory;
-
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-
 public class MasterSchedulerCommManager {
 
     final private Logger LOG = LoggerFactory.getLogger(MasterWorkerCommManager.class.getName());
     
     private ServerSocket serverSocket;
-    private Kryo k;
     private Thread listener;
     private boolean working = false;
     private MasterWorkerAPIImplementation api;
     
     public MasterSchedulerCommManager(int port, MasterWorkerAPIImplementation api){
         this.api = api;
-        this.k = KryoFactory.buildKryoForMasterWorkerProtocol();
         try {
             serverSocket = new ServerSocket(port);
             LOG.info(" Listening for scheduler commands on {}:{}", InetAddress.getLocalHost(), port);
@@ -75,16 +63,27 @@ public class MasterSchedulerCommManager {
                     
                     String[] args = input.split(",");
                     
-                    if (args.length == 1 && args[0].equals("stop")) {
-                        api.handleStop();
+                    Integer dataPort = null;
+                    if (args.length > 1) {
+                        try {
+                            dataPort = Integer.parseInt(args[1]);
+                        } catch (NumberFormatException e) {
+                            LOG.error(e.getMessage());
+                        }
                     }
-                    else if (args.length == 1 && args[0].equals("exit")) {
-                        api.handleExit();
+                    
+                    if (args.length >= 1 && args[0].equals("stop")) {
+                        api.handleStop(dataPort);
+                    }
+                    else if (args.length >= 1 && args[0].equals("exit")) {
+                        api.handleExit(dataPort);
                     }
                     else if (args.length > 1 && args[0].equals("migrate")) {
-                        String workerDataPort = args[1];
+                        if (dataPort == null)
+                            continue;
+                        
                         String newHost = (args.length > 2 ? args[2] : null);
-                        api.handleMigration(workerDataPort, newHost);
+                        api.handleMigration(dataPort, newHost);
                     }
                 }
                 catch(IOException io){
