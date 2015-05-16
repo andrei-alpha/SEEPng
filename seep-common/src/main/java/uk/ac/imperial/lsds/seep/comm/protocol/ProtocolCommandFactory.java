@@ -34,6 +34,12 @@ public class ProtocolCommandFactory {
 		return c;
 	}
 	
+	public static MasterWorkerCommand buildExitQueryCommand(){
+        ExitQueryCommand eqc = new ExitQueryCommand();
+        MasterWorkerCommand c = new MasterWorkerCommand(eqc);
+        return c;
+    }
+	
 	public static MasterWorkerCommand buildDeadWorkerCommand(int workerId, String reason){
 		DeadWorkerCommand dwc = new DeadWorkerCommand(workerId, reason);
 		MasterWorkerCommand c = new MasterWorkerCommand(dwc);

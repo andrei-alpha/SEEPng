@@ -185,6 +185,7 @@ public class YarnClusterManager implements InfrastructureManager {
                 yc.getString(YarnConfig.YARN_WORKER_PACKAGE_PATH) +
                 " --master.ip " + NetUtils.getHostname().split("/")[1] +
                 " --master.port " + String.valueOf(yc.getInt(YarnConfig.YARN_APPMASTER_LISTENING_PORT)) +
+                " --master.scheduler.port " + String.valueOf(yc.getInt(YarnConfig.YARN_APPMASTER_SCHEDULER_LISTENING_PORT)) +
                 " --worker.port " + String.valueOf(yc.getInt(YarnConfig.YARN_WORKER_LISTENING_PORT) + containerId) +
                 " --data.port " +  String.valueOf(yc.getInt(YarnConfig.YARN_WORKER_DATA_PORT) + containerId) +
                 " 1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR + "/stdout" + 

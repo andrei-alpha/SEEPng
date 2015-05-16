@@ -1,5 +1,8 @@
 package uk.ac.imperial.lsds.seepworker;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +19,14 @@ public class WorkerShutdownHookWorker implements Runnable {
 	private Conductor c;
 	private Connection masterConn;
 	private WorkerMasterAPIImplementation api;
+	private ArrayList<Object> tasks;
 	
 	public WorkerShutdownHookWorker(int workerId, Conductor c, Connection masterConn, WorkerMasterAPIImplementation api) {
 		this.workerId = workerId;
 		this.c = c;
 		this.masterConn = masterConn;
 		this.api = api;
+		this.tasks = new ArrayList<>();
 	}
 
 	@Override
@@ -34,7 +39,23 @@ public class WorkerShutdownHookWorker implements Runnable {
 		String reason = "unknown";
 		api.signalDeadWorker(masterConn, workerId, reason);
 		c.stopProcessing();
+		
+		// Close all the tasks that are running
+		for (Object task : tasks) {
+            Method method;
+            try {
+                method = task.getClass().getMethod("stop");
+                method.invoke(task);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+		
 		LOG.info("bye");
+	}
+	
+	public void addTask(Object task) {
+	    tasks.add(task);
 	}
 	
 	private void emergencyHook(){

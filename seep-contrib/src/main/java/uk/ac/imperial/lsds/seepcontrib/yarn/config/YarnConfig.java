@@ -31,6 +31,9 @@ public class YarnConfig extends Config {
 	public static final String YARN_APPMASTER_LISTENING_PORT = "yarn.master.port";
     private static final String YARN_APPMASTER_LISTENING_PORT_DOC = "The port in which master will receive commands from workers";
     
+    public static final String YARN_APPMASTER_SCHEDULER_LISTENING_PORT = "yarn.master.scheduler.port";
+    private static final String YARN_APPMASTER_SCHEDULER_LISTENING_PORT_DOC = "The port in which master will receive commands from scheduler";
+    
     public static final String YARN_WORKER_LISTENING_PORT = "yarn.worker.port";
     private static final String YARN_WORKER_LISTENING_PORT_DOC = "The port in which workers will receive commands from the master";
     
@@ -59,6 +62,7 @@ public class YarnConfig extends Config {
 				.define(YARN_WORKER_PACKAGE_PATH, Type.STRING, "", Importance.HIGH, YARN_WORKER_PACKAGE_PATH_DOC)
 				.define(YARN_APPMASTER_PACKAGE_PATH, Type.STRING, "", Importance.HIGH, YARN_APPMASTER_PACKAGE_PATH_DOC)
 				.define(YARN_APPMASTER_LISTENING_PORT, Type.INT, 3500, Importance.HIGH, YARN_APPMASTER_LISTENING_PORT_DOC)
+				.define(YARN_APPMASTER_SCHEDULER_LISTENING_PORT, Type.INT, 4000, Importance.HIGH, YARN_APPMASTER_SCHEDULER_LISTENING_PORT_DOC)
 				.define(YARN_WORKER_LISTENING_PORT, Type.INT, 3500, Importance.HIGH, YARN_WORKER_LISTENING_PORT_DOC)
 				.define(YARN_WORKER_DATA_PORT, Type.INT, 5000, Importance.HIGH, YARN_WORKER_DATA_PORT_DOC)
 				.define(YARN_RESOURCE_MANAGER_HOSTNAME, Type.STRING, "0.0.0.0", Importance.HIGH, YARN_RESOURCE_MANAGER_HOSTNAME_DOC)

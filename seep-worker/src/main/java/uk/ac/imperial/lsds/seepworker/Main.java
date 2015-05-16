@@ -87,7 +87,9 @@ public class Main {
 		this.configureMetricsReporting(wc);
 		
 		// Register JVM shutdown hook
-		registerShutdownHook(Utils.computeIdFromIpAndPort(Utils.getLocalIp(), myPort), c, masterConnection, api);
+		WorkerShutdownHookWorker hook = registerShutdownHook(Utils.computeIdFromIpAndPort(Utils.getLocalIp(), myPort), c, masterConnection, api);
+		hook.addTask(wwcm);
+		hook.addTask(wmcm);
 	}
 	
 	private void configureMetricsReporting(WorkerConfig wc){
@@ -147,9 +149,11 @@ public class Main {
 		}
 	}
 	
-	private static void registerShutdownHook(int workerId, Conductor c, Connection masterConn, 
+	private static WorkerShutdownHookWorker registerShutdownHook(int workerId, Conductor c, Connection masterConn, 
 											WorkerMasterAPIImplementation api){
-		Thread hook = new Thread(new WorkerShutdownHookWorker(workerId, c, masterConn, api));
+	    WorkerShutdownHookWorker shutdownHook = new WorkerShutdownHookWorker(workerId, c, masterConn, api);
+		Thread hook = new Thread(shutdownHook);
 		Runtime.getRuntime().addShutdownHook(hook);
+		return shutdownHook;
 	}
 }

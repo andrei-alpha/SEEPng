@@ -93,8 +93,10 @@ public class SeepYarnAppSubmissionClient {
                 " --deployment_target.type 1" +
                 " --ui.type 2" +
                 " --master.port " + yc.getInt(YarnConfig.YARN_APPMASTER_LISTENING_PORT) +
+                " --master.scheduler.port " + yc.getInt(YarnConfig.YARN_APPMASTER_SCHEDULER_LISTENING_PORT) +
                 " --" + YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME + " " + yc.getString(YarnConfig.YARN_RESOURCE_MANAGER_HOSTNAME) +
                 " --" + YarnConfig.YARN_APPMASTER_LISTENING_PORT + " " + yc.getInt(YarnConfig.YARN_APPMASTER_LISTENING_PORT) +
+                " --" + YarnConfig.YARN_APPMASTER_SCHEDULER_LISTENING_PORT + " " + yc.getInt(YarnConfig.YARN_APPMASTER_SCHEDULER_LISTENING_PORT) +
                 " --" + YarnConfig.YARN_WORKER_PACKAGE_PATH + " " + yc.getString(YarnConfig.YARN_WORKER_PACKAGE_PATH) +
                 " --" + YarnConfig.YARN_WORKER_LISTENING_PORT + " " + yc.getInt(YarnConfig.YARN_WORKER_LISTENING_PORT) +
                 " --" + YarnConfig.YARN_WORKER_DATA_PORT + " " + yc.getInt(YarnConfig.YARN_WORKER_DATA_PORT) +

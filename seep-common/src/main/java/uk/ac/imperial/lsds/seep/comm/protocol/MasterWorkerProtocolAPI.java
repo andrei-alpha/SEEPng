@@ -7,7 +7,8 @@ public enum MasterWorkerProtocolAPI {
 	QUERYDEPLOY((short)3, new QueryDeployCommand()),
 	STARTQUERY((short)5, new StartQueryCommand()),
 	STOPQUERY((short)6, new StopQueryCommand()),
-	DEADWORKER((short)7, new DeadWorkerCommand());
+	DEADWORKER((short)7, new DeadWorkerCommand()),
+	EXITQUERY((short)8, new StopQueryCommand()),;
 	
 	private short type;
 	private CommandType c;

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import uk.ac.imperial.lsds.seep.comm.protocol.CodeCommand;
+import uk.ac.imperial.lsds.seep.comm.protocol.ExitQueryCommand;
 import uk.ac.imperial.lsds.seep.comm.protocol.MasterWorkerCommand;
 import uk.ac.imperial.lsds.seep.comm.protocol.MasterWorkerProtocolAPI;
 import uk.ac.imperial.lsds.seep.comm.protocol.QueryDeployCommand;
@@ -115,6 +116,13 @@ public class WorkerMasterCommManager {
 						out.println("ack");
 						api.handleStopQuery(sqc);
 					}
+					// EXITPQUERY command
+                    else if(cType == MasterWorkerProtocolAPI.EXITQUERY.type()){
+                        LOG.info("RX ExitRuntime command");
+                        ExitQueryCommand eqc = c.getExitQueryCommand();
+                        out.println("ack");
+                        api.handleExitQuery(eqc);
+                    }
 				}
 				catch(IOException io){
 					io.printStackTrace();

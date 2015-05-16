@@ -11,12 +11,13 @@ public class LifecycleManager {
 	final private Logger LOG = LoggerFactory.getLogger(QueryManager.class);
 	
 	public enum AppStatus {
-		MASTER_READY(0, new int[]{1, 0}),
-		QUERY_SUBMITTED(1, new int[]{2, 1, 0}),
+		MASTER_READY(0, new int[]{1, 0, 7}),
+		QUERY_SUBMITTED(1, new int[]{2, 1, 0, 7}),
 		QUERY_DEPLOYED(2, new int[]{4, 1}),
 		QUERY_RUNNING(4, new int[]{5, 6, 2}),
 		QUERY_FAILED(5, new int[]{6, 4, 2}),
-		QUERY_STOPPED(6, new int[]{2});
+		QUERY_STOPPED(6, new int[]{2, 7}),
+		QUERY_EXITED(7, new int[]{0});
 		
 		private int id;
 		private int[] validStateTransitions;

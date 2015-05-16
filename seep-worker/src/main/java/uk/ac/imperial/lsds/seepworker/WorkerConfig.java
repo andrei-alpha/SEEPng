@@ -33,6 +33,9 @@ public class WorkerConfig extends Config {
     public static final String MASTER_PORT = "master.port";
     private static final String MASTER_PORT_DOC = "The port where the master is listening";
     
+    public static final String MASTER_SCHEDULER_PORT = "master.scheduler.port";
+    private static final String MASTER_SCHEDULER_PORT_DOC = "The port where the master is listening";
+    
     public static final String MASTER_CONNECTION_RETRIES = "master.connection.retries.number";
     private static final String MASTER_CONNECTION_RETRIES_DOC = "Maximum number of attemps to connect to master";
     
@@ -76,6 +79,7 @@ public class WorkerConfig extends Config {
 		config = new ConfigDef().define(DEPLOYMENT_TARGET_TYPE, Type.INT, 0, Importance.HIGH, DEPLOYMENT_TARGET_TYPE_DOC)
 				.define(LISTENING_PORT, Type.INT, 3500, Importance.HIGH, LISTENING_PORT_DOC)
 				.define(MASTER_PORT, Type.INT, 3500, Importance.HIGH, MASTER_PORT_DOC)
+				.define(MASTER_SCHEDULER_PORT, Type.INT, 4000, Importance.HIGH, MASTER_SCHEDULER_PORT_DOC)
 				.define(MASTER_IP, Type.STRING, Importance.HIGH, MASTER_IP_DOC)
 				.define(MASTER_CONNECTION_RETRIES, Type.INT, Integer.MAX_VALUE, Importance.LOW, MASTER_CONNECTION_RETRIES_DOC)
 				.define(MASTER_RETRY_BACKOFF_MS, Type.INT, 3000, Importance.LOW, MASTER_RETRY_BACKOFF_MS_DOC)

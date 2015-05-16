@@ -11,6 +11,7 @@ import uk.ac.imperial.lsds.seep.api.PhysicalOperator;
 import uk.ac.imperial.lsds.seep.api.PhysicalSeepQuery;
 import uk.ac.imperial.lsds.seep.comm.Comm;
 import uk.ac.imperial.lsds.seep.comm.Connection;
+import uk.ac.imperial.lsds.seep.comm.protocol.ExitQueryCommand;
 import uk.ac.imperial.lsds.seep.comm.protocol.MasterWorkerCommand;
 import uk.ac.imperial.lsds.seep.comm.protocol.ProtocolCommandFactory;
 import uk.ac.imperial.lsds.seep.comm.protocol.QueryDeployCommand;
@@ -90,4 +91,7 @@ public class WorkerMasterAPIImplementation {
 		c.stopProcessing();
 	}
 	
+	public void handleExitQuery(ExitQueryCommand sqc) {
+        System.exit(0);
+    }
 }

@@ -20,6 +20,7 @@ import uk.ac.imperial.lsds.seep.infrastructure.EndPoint;
 import uk.ac.imperial.lsds.seep.infrastructure.InfrastructureManager;
 import uk.ac.imperial.lsds.seep.util.Utils;
 import uk.ac.imperial.lsds.seepcontrib.yarn.config.YarnConfig;
+import uk.ac.imperial.lsds.seepmaster.comm.MasterSchedulerCommManager;
 import uk.ac.imperial.lsds.seepmaster.comm.MasterWorkerAPIImplementation;
 import uk.ac.imperial.lsds.seepmaster.comm.MasterWorkerCommManager;
 import uk.ac.imperial.lsds.seepmaster.infrastructure.master.InfrastructureManagerFactory;
@@ -33,7 +34,7 @@ public class Main {
 	
 	final private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
-	private void executeMaster(String[] args, MasterConfig mc, YarnConfig yc, String[] queryArgs){
+	private void executeMaster(String[] args, MasterConfig mc, YarnConfig yc, String[] queryArgs, MasterShutdownHookWorker hook) {
 		int infType = mc.getInt(MasterConfig.DEPLOYMENT_TARGET_TYPE);
 		LOG.info("Deploy target of type: {}", InfrastructureManagerFactory.nameInfrastructureManagerWithType(infType));
 		InfrastructureManager inf = InfrastructureManagerFactory.createInfrastructureManager(infType);
@@ -47,13 +48,21 @@ public class Main {
 		QueryManager qm = QueryManager.getInstance(inf, mapOperatorToEndPoint, comm, lifeManager);
 		// TODO: put this in the config manager
 		int port = mc.getInt(MasterConfig.LISTENING_PORT);
+		int schedulerPort = mc.getInt(MasterConfig.SCHEDULER_LISTENING_PORT);
 		MasterWorkerAPIImplementation api = new MasterWorkerAPIImplementation(qm, inf);
 		MasterWorkerCommManager mwcm = new MasterWorkerCommManager(port, api);
+		MasterSchedulerCommManager mscm = new MasterSchedulerCommManager(schedulerPort, api);
 		mwcm.start();
+		mscm.start();
 		
 		int uiType = mc.getInt(MasterConfig.UI_TYPE);
 		UI ui = UIFactory.createUI(uiType, qm, inf);
 		LOG.info("Created UI of type: {}", UIFactory.nameUIOfType(uiType));
+		
+		// Add bookkeping tasks that need to be closed before exiting
+		hook.addTask(mscm);
+        hook.addTask(mscm);
+        hook.addTask(ui);
 		
 		String queryPathFile = null;
 		String baseClass = null;
@@ -102,7 +111,7 @@ public class Main {
 	
 	public static void main(String args[]){
 		// Register JVM shutdown hook
-		registerShutdownHook();
+		MasterShutdownHookWorker hook = registerShutdownHook();
 		// Get Properties with command line configuration 
 		List<ConfigKey> configKeys = MasterConfig.getAllConfigKey();
 		configKeys.addAll(YarnConfig.getAllConfigKey());
@@ -128,7 +137,7 @@ public class Main {
 		
 		// Any other infrastructure calls executeMaster
 		Main instance = new Main();
-		instance.executeMaster(args, mc, yc, cla.getQueryArgs());
+		instance.executeMaster(args, mc, yc, cla.getQueryArgs(), hook);
 	}
 	
 	private static boolean validateProperties(Properties validatedProperties){	
@@ -144,8 +153,10 @@ public class Main {
 		}
 	}
 	
-	private static void registerShutdownHook(){
-		Thread hook = new Thread(new MasterShutdownHookWorker());
+	private static MasterShutdownHookWorker registerShutdownHook(){
+	    MasterShutdownHookWorker shutdownHook = new MasterShutdownHookWorker();
+		Thread hook = new Thread(shutdownHook);
 		Runtime.getRuntime().addShutdownHook(hook);
+		return shutdownHook;
 	}
 }

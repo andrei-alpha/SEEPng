@@ -214,11 +214,32 @@ public class QueryManager {
 		Set<Integer> involvedEUId = originalQuery.getIdOfEUInvolved();
 		Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
 		
-		// Send start query command
+		// Send stop query command
 		MasterWorkerCommand stop = ProtocolCommandFactory.buildStopQueryCommand();
 		comm.send_object_sync(stop, connections, k);
 		lifeManager.tryTransitTo(LifecycleManager.AppStatus.QUERY_STOPPED);
 		return true;
+	}
+	
+	public boolean exitQuery() {
+	    boolean allowed = lifeManager.canTransitTo(LifecycleManager.AppStatus.QUERY_EXITED);
+        if(!allowed){
+            LOG.error("Attempt to violate application lifecycle");
+            return false;
+        }
+        // TODO: take a look at the following two lines. Stateless is good to keep everything lean. Yet consider caching
+        Set<Integer> involvedEUId = originalQuery.getIdOfEUInvolved();
+        Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
+        
+        // Send exit query command
+        MasterWorkerCommand exit = ProtocolCommandFactory.buildExitQueryCommand();
+        comm.send_object_sync(exit, connections, k);
+        lifeManager.tryTransitTo(LifecycleManager.AppStatus.QUERY_EXITED);
+        
+        if (inf instanceof YarnClusterManager) {
+            ((YarnClusterManager) inf).stop();
+        }
+        return true;
 	}
 	
 	private PhysicalSeepQuery createOriginalPhysicalQuery(){

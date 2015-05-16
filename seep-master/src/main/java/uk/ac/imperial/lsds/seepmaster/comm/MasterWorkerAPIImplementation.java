@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import uk.ac.imperial.lsds.seep.comm.protocol.DeadWorkerCommand;
 import uk.ac.imperial.lsds.seep.infrastructure.ExecutionUnit;
 import uk.ac.imperial.lsds.seep.infrastructure.InfrastructureManager;
+import uk.ac.imperial.lsds.seepcontrib.yarn.infrastructure.YarnClusterManager;
 import uk.ac.imperial.lsds.seepmaster.query.QueryManager;
 
 
@@ -50,5 +51,31 @@ public class MasterWorkerAPIImplementation {
 		
 		qm.newDeadWorker(workerId);
 	}
+
+	public void handleMigration(String workerDataPort, String newHost) {
+	    LOG.error("TO DO:");
+	}
 	
+	public void handleStop() {
+	    LOG.info("Stopping query...");
+	    boolean allowed = qm.stopQuery();
+        if(!allowed){
+            LOG.warn("Could not stop query");
+        }
+        else{
+            LOG.info("Stopping query...OK");
+        }
+	}
+	
+	public void handleExit() {
+	    LOG.info("Exit query...");
+        boolean allowed = qm.exitQuery();
+        if(!allowed){
+            LOG.warn("Could not exit query");
+        }
+        else{
+            LOG.info("Exit query...OK");
+        }
+        System.exit(0);
+	}
 }

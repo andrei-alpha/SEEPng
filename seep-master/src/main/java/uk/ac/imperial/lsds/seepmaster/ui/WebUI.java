@@ -77,8 +77,11 @@ public class WebUI implements UI{
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-		
+		try {
+            server.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	private void silenceJettyLogger(){
