@@ -75,6 +75,9 @@ public class MasterSchedulerCommManager {
                     if (args.length >= 1 && args[0].equals("stop")) {
                         api.handleStop(dataPort);
                     }
+                    else if (args.length >= 1 && args[0].equals("start")) {
+                        api.handleStart(dataPort);
+                    }
                     else if (args.length >= 1 && args[0].equals("exit")) {
                         api.handleExit(dataPort);
                     }

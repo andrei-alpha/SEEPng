@@ -150,6 +150,7 @@ public class QueryManager {
         
         SeepQueryPhysicalOperator po = (SeepQueryPhysicalOperator) PhysicalSeepQuery.findOperator(replacedOperatorId, physicalOperators);
         po.replaceWrappingEndPoint(ep);
+        opToEndpointMapping.put(po.getOperatorId(), po.getWrappingEndPoint());
         
 	    Set<Connection> connection = inf.getConnectionsTo(euIds);
 	    sendQueryInformationToNodes(connection);
@@ -177,7 +178,7 @@ public class QueryManager {
 	    return true;
 	}
 	
-	public boolean resumeNode(Integer euId) {
+	public boolean startNode(Integer euId) {
 	    if (lifeManager.getStatus() != AppStatus.QUERY_RUNNING) {
             return false;
         }

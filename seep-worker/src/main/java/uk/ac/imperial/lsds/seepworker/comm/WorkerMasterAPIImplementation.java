@@ -92,6 +92,7 @@ public class WorkerMasterAPIImplementation {
 	}
 	
 	public void handleExitQuery(ExitQueryCommand sqc) {
-        System.exit(0);
+        c.exitProcessing();
+	    System.exit(0);
     }
 }

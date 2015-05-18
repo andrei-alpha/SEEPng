@@ -97,6 +97,34 @@ public class MasterWorkerAPIImplementation {
 	    }
 	}
 	
+	public void handleStart(Integer dataPort) {
+	    if (dataPort == null) {
+            LOG.info("Starting query...");
+            boolean allowed = qm.startQuery();
+            if(!allowed){
+                LOG.warn("Could not start query");
+            }
+            else{
+                LOG.info("Starting query...OK");
+            }
+        } else if (inf instanceof YarnClusterManager) {
+            Integer euId = ((YarnClusterManager) inf).getExecutionUnitIdFromDataPort(dataPort);
+            if (euId == null) {
+                LOG.error("No worker found running on dataPort {}", dataPort);
+                return;
+            }
+            
+            LOG.info("Starting worker running on dataPort {} ...", dataPort);
+            if (!qm.startNode(euId)) {
+                LOG.error("Failed to request worker to start execution.");
+                return;
+            }
+            LOG.info("Starting worker OK", dataPort);
+        } else {
+            LOG.warn("Operator scheduling is currently suporrted only for YARN deployments.");
+        }
+	}
+	
 	public void handleExit(Integer dataPort) {
 	    if (dataPort == null) {
 	        LOG.info("Exit query...");

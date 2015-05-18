@@ -83,7 +83,10 @@ public class SingleThreadProcessingEngine implements ProcessingEngine {
 	public void stop() {
 		if(task != null) task.close();	// to avoid nullpointer when Ctrl^c after stopping query
 		working = false;
-		this.closeAndCleanEngine();
+	}
+	
+	public void exit() {
+	    this.closeAndCleanEngine();
 	}
 	
 	private void closeAndCleanEngine(){

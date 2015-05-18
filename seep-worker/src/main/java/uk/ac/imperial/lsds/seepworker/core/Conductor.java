@@ -72,6 +72,11 @@ public class Conductor {
 		LOG.info("Stopping processing engine...OK");
 	}
 	
+	public void exitProcessing() {
+	    LOG.info("Exiting processing engine...");
+        engine.stop();
+	}
+	
 	public void deployPhysicalOperator(PhysicalOperator o, PhysicalSeepQuery query){
 		this.o = o;
 		this.task = o.getSeepTask();

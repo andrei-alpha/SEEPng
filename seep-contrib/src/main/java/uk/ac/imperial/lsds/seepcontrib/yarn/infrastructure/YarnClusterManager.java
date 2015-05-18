@@ -234,8 +234,7 @@ public class YarnClusterManager implements InfrastructureManager {
         containerManager.startContainer(container, context);
         
         // TODO: This may not be safe always if YARN doesn't allocate all nodes at once
-        while (!pendingRequests.isEmpty())
-            amClient.removeContainerRequest( pendingRequests.remove() );
+        amClient.removeContainerRequest( pendingRequests.remove() );
     }
     
     // TODO: find a way to fix this YARN bug
