@@ -154,6 +154,9 @@ public class YarnClusterManager implements InfrastructureManager {
         List<String> hosts = new ArrayList<>();
         try {
             String server = yc.getString(YarnConfig.YARN_SCHEDULER_HOST);
+            if (!server.startsWith("http://"))
+                server = "http://" + server;
+            
             URL resourceReport = new URL(server + "/scheduler/host");
             URLConnection urlConn = resourceReport.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
@@ -164,7 +167,7 @@ public class YarnClusterManager implements InfrastructureManager {
             }
             in.close();
         } catch (Exception e) { // Any connection or parsing exception
-            hosts.add("*");
+            LOG.warn("Failed to get preferred host: {}", e.getMessage());
         }
         return hosts;
     }
@@ -184,10 +187,15 @@ public class YarnClusterManager implements InfrastructureManager {
             hosts = new String[preferredHosts.size()];
             hosts = preferredHosts.toArray(hosts);
         }
-        LOG.info("Preffered host for next container is {}", hosts[0]);
         
-        AMRMClient.ContainerRequest request =
-                new AMRMClient.ContainerRequest(capability, hosts, null, priority, false);
+        AMRMClient.ContainerRequest request;
+        if (hosts.length != 0) {
+            LOG.info("Preferred host for next container is {}", hosts[0]);
+            request = new AMRMClient.ContainerRequest(capability, hosts, null, priority, false);
+        } else {
+            request = new AMRMClient.ContainerRequest(capability, null, null, priority);
+        }
+            
         amHandler.newContainerRequest();
         amClient.addContainerRequest(request);
         pendingRequests.add(request);
