@@ -61,7 +61,6 @@ public class YarnClusterManager implements InfrastructureManager {
     private Map<Integer, Integer> dataPortsToOffsets;
     private List<Integer> availablePortOffsets;
     private List<String> availableHosts;
-    private Queue<AMRMClient.ContainerRequest> pendingRequests;
     private YarnConfig yc;
     
     public YarnClusterManager() {
@@ -71,7 +70,6 @@ public class YarnClusterManager implements InfrastructureManager {
         this.dataPortsToOffsets = new HashMap<>();
         this.availableHosts = new ArrayList<>();
         this.availablePortOffsets = new ArrayList<>();
-        this.pendingRequests = new LinkedList<>();
     }
     
     public void init(Config yc) {
@@ -198,7 +196,6 @@ public class YarnClusterManager implements InfrastructureManager {
             
         amHandler.newContainerRequest();
         amClient.addContainerRequest(request);
-        pendingRequests.add(request);
         
         LOG.info("Submit container request: " + request.toString());
         LOG.info("Available resources: " + amClient.getAvailableResources().toString());
@@ -232,9 +229,6 @@ public class YarnClusterManager implements InfrastructureManager {
         context.setEnvironment(System.getenv());
         LOG.info("Starting yarn container with id: {}", containerId);
         containerManager.startContainer(container, context);
-        
-        // TODO: This may not be safe always if YARN doesn't allocate all nodes at once
-        amClient.removeContainerRequest( pendingRequests.remove() );
     }
     
     // TODO: find a way to fix this YARN bug
