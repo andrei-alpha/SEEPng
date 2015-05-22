@@ -9,4 +9,5 @@ include \
 	"simple-sourcefile-stateless-query",
 	"simple-kafka-stateless-pipeline",
   "kafka-cpu-pipeline",
-  "kafka-io-pipeline"
+  "kafka-io-pipeline",
+  "twitter-streaming"
