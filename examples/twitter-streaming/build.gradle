@@ -13,6 +13,7 @@ repositories {
 dependencies {
 	compile name: 'seep-common-0.1'
   compile name: 'seep-contrib-0.1'
+  compile 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 
 

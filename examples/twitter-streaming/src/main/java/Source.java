@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.json.simple.*;
+
 import uk.ac.imperial.lsds.seep.api.API;
 import uk.ac.imperial.lsds.seep.api.SeepTask;
 import uk.ac.imperial.lsds.seep.api.data.ITuple;
@@ -21,6 +23,7 @@ public class Source implements SeepTask {
             .newField(Type.STRING, "text").build();
 	
 	private boolean working = true;
+	private static long ts = 0;
 	
 	@Override
 	public void setUp() {
@@ -28,19 +31,19 @@ public class Source implements SeepTask {
 	}
 	
 	@Override
-	public void processData(ITuple data, API api) {
-	    long ts = 0;
-	    
+	public void processData(ITuple data, API api) {	    
 	    while(working) {
             try{
-                URL resourceReport = new URL("http://wombat07.doc.res.ic.ac.uk:7011/tweet/text");
+                URL resourceReport = new URL("http://wombat07.doc.res.ic.ac.uk:7011/tweet/text100");
                 URLConnection urlConn = resourceReport.openConnection();
                 BufferedReader in = new BufferedReader(new InputStreamReader(urlConn.getInputStream()));                
-                String text = in.readLine();
-                text = text.substring(1, text.length()-1);
-
-                byte[] processedData = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{ts++, text});
-                api.send(processedData);
+                Object obj=JSONValue.parse(in.readLine());
+                Object[] messages = ((JSONArray)obj).toArray();
+                for (Object message : messages) {
+                    String text = (String)message;
+                    byte[] processedData = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{ts++, text});
+                    api.send(processedData);
+                }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
