@@ -15,7 +15,7 @@ public class Sink implements SeepTask {
 		long count = data.getLong("ts");
 		String text = data.getString("text");
 		
-		System.out.println("[Sink] most frequent word on Twitter last 10 seconds: " + text + " with " + count + " occurrences");
+		//System.out.println("[Sink] most frequent word on Twitter last 10 seconds: " + text + " with " + count + " occurrences");
 	}
 
 	@Override
