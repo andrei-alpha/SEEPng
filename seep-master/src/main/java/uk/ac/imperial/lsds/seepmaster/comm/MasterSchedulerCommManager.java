@@ -36,7 +36,7 @@ public class MasterSchedulerCommManager {
     
     public void start(){
         this.working = true;
-        LOG.info("Start MasterWorkerCommManager");
+        LOG.info("Start MasterSchedulerCommManager");
         this.listener.start();
     }
     

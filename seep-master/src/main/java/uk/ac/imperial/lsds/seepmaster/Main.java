@@ -57,7 +57,6 @@ public class Main {
 		
 		int uiType = mc.getInt(MasterConfig.UI_TYPE);
 		UI ui = UIFactory.createUI(uiType, qm, inf);
-		LOG.info("Created UI of type: {}", UIFactory.nameUIOfType(uiType));
 		
 		// Add bookkeping tasks that need to be closed before exiting
 		hook.addTask(mscm);
@@ -106,7 +105,17 @@ public class Main {
 			}
 		}
 		
-		ui.start();
+		if (mc.getInt(MasterConfig.DEPLOYMENT_TARGET_TYPE) != 1) {
+		    LOG.info("Created UI of type: {}", UIFactory.nameUIOfType(uiType));
+		    ui.start();
+		} else {
+		    try {
+		        while (true)
+		            Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+		}
 	}
 	
 	public static void main(String args[]){
