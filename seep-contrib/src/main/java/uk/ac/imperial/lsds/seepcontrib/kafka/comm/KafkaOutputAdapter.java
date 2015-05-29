@@ -2,6 +2,9 @@ package uk.ac.imperial.lsds.seepcontrib.kafka.comm;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import uk.ac.imperial.lsds.seep.api.DataStoreType;
 import uk.ac.imperial.lsds.seep.core.EventAPI;
 import uk.ac.imperial.lsds.seep.core.OutputAdapter;
@@ -12,12 +15,14 @@ public class KafkaOutputAdapter implements OutputAdapter {
 
 	final private DataStoreType TYPE = DataStoreType.KAFKA;
 	final private KafkaSystemProducer producer;
+	final private static Logger LOG = LoggerFactory.getLogger(KafkaOutputAdapter.class);
 	
 	private int streamId;
 
 	public KafkaOutputAdapter(String kafkaServer, String producerId, String baseTopic, int streamId) {
 		this.streamId = streamId;
 		producer = new KafkaSystemProducer(kafkaServer, producerId);
+		LOG.info("Kafka write to topic " + baseTopic + String.valueOf(streamId));
 		producer.register(baseTopic + String.valueOf(streamId) );
 	}
 	

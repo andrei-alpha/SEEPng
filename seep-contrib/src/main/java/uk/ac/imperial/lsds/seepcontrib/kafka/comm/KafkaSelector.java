@@ -49,7 +49,7 @@ public class KafkaSelector {
         int threadNumber = 0;
         for (Map.Entry<Integer, InputAdapter> entry : dataAdapters.entrySet()) {
         	String topic = baseTopic + String.valueOf(entry.getValue().getStreamId());
-        	LOG.info("Create unique topic " + topic);
+        	LOG.info("Kafka read from topic " + topic);
         	
         	List<KafkaStream<byte[], byte[]>> streams = consumerMap.get(topic);
  
