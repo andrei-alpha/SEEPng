@@ -1,9 +1,5 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
-import java.util.Scanner;
 
 import uk.ac.imperial.lsds.seep.api.API;
 import uk.ac.imperial.lsds.seep.api.SeepTask;
@@ -16,7 +12,7 @@ import uk.ac.imperial.lsds.seep.api.data.Schema.SchemaBuilder;
 
 public class Source implements SeepTask {
 
-	private Schema schema = SchemaBuilder.getInstance().newField(Type.INT, "ts").newField(Type.STRING, "text").build();
+	private Schema schema = SchemaBuilder.getInstance().newField(Type.INT, "ts").newField(Type.INT, "key").newField(Type.STRING, "text").build();
 	
 	private boolean working = true;
 	
@@ -28,21 +24,19 @@ public class Source implements SeepTask {
 	@Override
 	public void processData(ITuple data, API api) {
 		int ts = 0;
-		
-		while(working) {
-		    try {
-		        FileInputStream inputStream = new FileInputStream("/home/aba111/iotest/data");
-		        Scanner sc = new Scanner(inputStream);
-		        while (sc.hasNextLine()) {
-		            byte[] d = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{++ts, sc.nextLine()});
-		            api.send(d);
-		            
-		        }
-		        inputStream.close();
-		        sc.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+		Random random = new Random();
+		while(working){
+		    int key = 0;
+		    
+		    // Create 100Kb text and send it over the network
+		    String text = new BigInteger(256000, random).toString(32);
+		    key = random.nextInt(128);
+
+		    //System.out.println("[Source] ts: " + ts + " text size: " + text.length() + " hash: " + text.hashCode());
+			byte[] d = OTuple.create(schema, new String[]{"ts", "key", "text"}, new Object[]{ts, key, text});
+			api.send(d);
+			
+			ts++;
 		}
 
 	}
