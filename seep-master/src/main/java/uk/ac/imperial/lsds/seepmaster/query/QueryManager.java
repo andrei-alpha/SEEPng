@@ -2,11 +2,13 @@ package uk.ac.imperial.lsds.seepmaster.query;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -54,6 +56,9 @@ public class QueryManager {
 	private List<Integer> deadWorkers;
 	private final Comm comm;
 	private final Kryo k;
+	
+	// TODO: remove after benchmarks
+	private long migrationStartTime = 0;
 	
 	public PhysicalSeepQuery getOriginalPhysicalQuery(){
 		return originalQuery;
@@ -160,6 +165,18 @@ public class QueryManager {
 	        MasterWorkerCommand start = ProtocolCommandFactory.buildStartQueryCommand();
 	        comm.send_object_sync(start, connection, k);
 	    }
+	    
+	    long deltaTime = (System.currentTimeMillis() - migrationStartTime);
+	    if (deltaTime < 99999) {
+            try {
+                URL url = new URL("http://wombat07.doc.res.ic.ac.uk:9999/new/migrate/" + String.valueOf(deltaTime));
+                URLConnection conn = url.openConnection();
+                InputStream inputStream = conn.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+	    }
+	    
 	    return true;
 	}
 	
@@ -168,6 +185,7 @@ public class QueryManager {
 	            lifeManager.getStatus() != AppStatus.QUERY_DEPLOYED) {
             return false;
         }
+	    migrationStartTime = System.currentTimeMillis();
 	    
 	    Set<Integer> involvedEUId = new HashSet<Integer>(Arrays.asList(euId));
         Set<Connection> connections = inf.getConnectionsTo(involvedEUId);
