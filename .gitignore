@@ -46,6 +46,12 @@ examples/kafka-cpu-pipeline/.settings/
 examples/kafka-cpu-pipeline/build/*
 examples/kafka-io-pipeline/.settings/
 examples/kafka-io-pipeline/build/*
+examples/grep-benchmark/.settings/
+examples/grep-benchmark/build/*
+examples/word-count-benchmark/.settings/
+examples/word-count-benchmark/build/*
+examples/top-k-count-benchmark/.settings/
+examples/top-k-count-benchmark/build/*
 examples/kafka-text-pipeline/.settings/
 examples/kafka-text-pipeline/build/*
 examples/twitter-streaming/build/*

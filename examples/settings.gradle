@@ -11,4 +11,7 @@ include \
   "kafka-cpu-pipeline",
   "kafka-io-pipeline",
   "kafka-text-pipeline",
-  "twitter-streaming"
+  "twitter-streaming",
+  "grep-benchmark",
+  "word-count-benchmark",
+  "top-k-count-benchmark"
