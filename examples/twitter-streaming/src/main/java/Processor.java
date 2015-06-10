@@ -29,15 +29,15 @@ public class Processor implements SeepTask {
 		String text = data.getString("text");
 		
 		for (String word : text.split(" ")) {
-		    //if (word.length() > 2 && !ignoredWords.contains(word)) {
-		    //    Integer prevCnt = wordCount.get(word);
-		    //    wordCount.put(word, (prevCnt == null ? 0 : prevCnt) + 1);
-		    //}
-		    byte[] processedData = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{timestamp, word});
-            api.send(processedData);
+		    if (word.length() > 2 && !ignoredWords.contains(word)) {
+		        Integer prevCnt = wordCount.get(word);
+		        wordCount.put(word, (prevCnt == null ? 0 : prevCnt) + 1);
+		    }
+		    //byte[] processedData = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{timestamp, word});
+            //api.send(processedData);
 		}
 		
-		/*if (System.currentTimeMillis() - timestamp > 10000) {
+		if (System.currentTimeMillis() - timestamp > 10000) {
 		    String mostFrequentWord = null;
 		    long count = -1;
 		    for (Entry<String, Integer> entry : wordCount.entrySet()) {
@@ -52,7 +52,7 @@ public class Processor implements SeepTask {
 		    byte[] processedData = OTuple.create(schema, new String[]{"ts", "text"}, new Object[]{count, mostFrequentWord});
 		    api.send(processedData);
 		    timestamp = System.currentTimeMillis();
-		}*/
+		}
 	}
 
 	@Override
