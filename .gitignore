@@ -56,6 +56,8 @@ examples/kafka-text-pipeline/.settings/
 examples/kafka-text-pipeline/build/*
 examples/twitter-streaming/build/*
 examples/twitter-streaming/.settings/
+examples/twitter-k-exposure/build/*
+examples/twitter-k-exposure/.settings/
 examples/static-scaleout-pipeline-stateful-query/.settings/
 examples/static-scaleout-pipeline-stateful-query/build/
 deploy/

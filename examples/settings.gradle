@@ -14,4 +14,6 @@ include \
   "twitter-streaming",
   "grep-benchmark",
   "word-count-benchmark",
-  "top-k-count-benchmark"
+  "top-k-count-benchmark",
+  "twitter-k-exposure",
+  "terasort"
