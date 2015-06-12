@@ -25,7 +25,7 @@ public class Base implements QueryComposer {
         
         // Generate a unique topic for this task
         Random random = new Random();
-        String topic = "seep-" + new BigInteger(50, random).toString(32);
+        String topic = "seep-verifier" + new BigInteger(50, random).toString(32);
         p.setProperty(KafkaConfig.PRODUCER_CLIENT_ID, topic);
         p.setProperty(KafkaConfig.CONSUMER_GROUP_ID, topic);
         p.setProperty(KafkaConfig.BASE_TOPIC, topic);
@@ -36,8 +36,8 @@ public class Base implements QueryComposer {
 	  System.out.println("[Base] Start to build query");
 		
 		Schema schema = SchemaBuilder.getInstance().newField(Type.LONG, "ts")
-												   .newField(Type.STRING, "text")
-												   .newField(Type.STRING, "user").build();
+												   .newField(Type.STRING, "program")
+												   .newField(Type.STRING, "mode").build();
 		
 		LogicalOperator src = queryAPI.newStatelessSource(new Source(), 0);
 		LogicalOperator processor = queryAPI.newStatelessOperator(new Processor(), 1);

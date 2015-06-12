@@ -16,4 +16,5 @@ include \
   "word-count-benchmark",
   "top-k-count-benchmark",
   "twitter-k-exposure",
-  "terasort"
+  "terasort",
+  "software-verifier"
