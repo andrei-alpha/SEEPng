@@ -24,12 +24,13 @@ public class Processor implements SeepTask {
 	
 	@Override
 	public void processData(ITuple data, API api) {
+	    long ts = data.getLong("ts");
 		String program = data.getString("program");
 		String mode = data.getString("mode");
 		
 		try {
 		    String result = srt.tool.API.verify(program, mode, 5, 50, false);
-		    byte[] processedData = OTuple.create(schema, new String[]{"ts", "program", "mode"}, new Object[]{program, result});
+		    byte[] processedData = OTuple.create(schema, new String[]{"ts", "program", "mode"}, new Object[]{ts, program, result});
 	        api.send(processedData);
 		} catch (Exception e) {
 		    // pass

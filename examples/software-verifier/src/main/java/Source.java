@@ -41,8 +41,8 @@ public class Source implements SeepTask {
                 
                 Object obj=JSONValue.parse(in.readLine());
                 JSONArray params = ((JSONArray)obj);
-                String program = params.get(0).toString();
-                String mode = params.get(1).toString();
+                String mode = params.get(0).toString();
+                String program = params.get(1).toString();
                
                 byte[] processedData = OTuple.create(schema, new String[]{"ts", "program", "mode"}, new Object[]{ts++, program, mode});
                 api.send(processedData);

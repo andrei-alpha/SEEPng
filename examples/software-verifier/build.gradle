@@ -16,6 +16,7 @@ dependencies {
   compile name: 'seep-contrib-0.1'
   compile 'com.googlecode.json-simple:json-simple:1.1.1'
   compile name: 'tool'
+  compile 'org.antlr:antlr:3.5.2'
 }
 
 

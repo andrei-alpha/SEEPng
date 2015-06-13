@@ -42,6 +42,7 @@ public class Processor implements SeepTask {
 		    if (word.endsWith(":"))
 		        word = word.substring(0, word.length() - 1);
 		    if (word.startsWith("@")) {
+		        word = word.substring(1, word.length());
 		        HashSet<String> nodes;
 		        if (!neighbours.containsKey(user))
 		            nodes = new HashSet<String>();
@@ -59,7 +60,7 @@ public class Processor implements SeepTask {
 		        posters.put(word, users);
 
 		        long count = getIntersection(neighbours.get(user), posters.get(word));
-		        if (count > 0) {
+		        if (count > 4) {
 		            byte[] processedData = OTuple.create(schema, new String[]{"ts", "text", "user"}, new Object[]{count, word, ""});
 		            api.send(processedData);
 		        }
