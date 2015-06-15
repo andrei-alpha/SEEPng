@@ -57,7 +57,7 @@ public class YarnConfig extends Config {
     
     static{
 		config = new ConfigDef().define(YARN_PROPERTIES_FILE, Type.STRING, Importance.LOW, YARN_PROPERTIES_FILE_DOC)
-				.define(YARN_CONTAINER_MEMORY_MB, Type.INT, 512, Importance.HIGH, YARN_CONTAINER_MEMORY_MB_DOC)
+				.define(YARN_CONTAINER_MEMORY_MB, Type.INT, 1024, Importance.HIGH, YARN_CONTAINER_MEMORY_MB_DOC)
 				.define(YARN_CONTAINER_CPU_CORES, Type.INT, 1, Importance.HIGH, YARN_CONTAINER_CPU_CORES_DOC)
 				.define(YARN_WORKER_PACKAGE_PATH, Type.STRING, "", Importance.HIGH, YARN_WORKER_PACKAGE_PATH_DOC)
 				.define(YARN_APPMASTER_PACKAGE_PATH, Type.STRING, "", Importance.HIGH, YARN_APPMASTER_PACKAGE_PATH_DOC)
