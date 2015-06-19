@@ -13,7 +13,7 @@ public class Sink implements SeepTask {
 	@Override
 	public void processData(ITuple data, API api) {
 		long ts = data.getLong("ts");
-		String result = data.getString("result");
+		String result = data.getString("mode");
 	}
 
 	@Override
